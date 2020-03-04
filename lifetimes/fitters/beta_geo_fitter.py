@@ -192,7 +192,7 @@ class BetaGeoFitter(BaseFitter):
         A_4 = np.log(a) - np.log(b + np.maximum(freq, 1) - 1) - (r + freq) * np.log(rec + alpha)
 
         penalizer_term = penalizer_coef * sum(params ** 2)
-        ll = weights * (A_1 + A_2 + np.log(np.exp(A_3) + np.exp(A_4) * (freq > 0)))
+        ll = weights * (A_1 + A_2 + np.where(freq > 0, np.logaddexp(A_3, A_4), A_3)
 
         return -ll.sum() / weights.sum() + penalizer_term
 
